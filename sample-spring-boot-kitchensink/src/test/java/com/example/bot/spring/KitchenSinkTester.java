@@ -46,10 +46,11 @@ import com.example.bot.spring.DatabaseEngine;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { KitchenSinkTester.class, DatabaseEngine.class })
+//@SpringBootTest(classes = { KitchenSinkTester.class, DatabaseEngine.class })
+@SpringBootTest(classes = { KitchenSinkTester.class, SQLDatabaseEngine.class })
 public class KitchenSinkTester {
 	@Autowired
-	private DatabaseEngine databaseEngine;
+	private SQLDatabaseEngine databaseEngine;
 	
 	@Test
 	public void testNotFound() throws Exception {
@@ -59,7 +60,7 @@ public class KitchenSinkTester {
 		} catch (Exception e) {
 			thrown = true;
 		}
-		assertThat(thrown);
+		assertThat(thrown).isEqualTo(true);
 	}
 	
 	@Test
@@ -71,7 +72,52 @@ public class KitchenSinkTester {
 		} catch (Exception e) {
 			thrown = true;
 		}
-		assertThat(!thrown);
-		assertThat(result.equals("def"));
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("def");
+	}
+	
+	@Test
+	public void test_case3() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.databaseEngine.search("Hi");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Hey, how things going?");
+		//assertThat(result.equals("Hey, how things going?"));
+		
+	}
+	
+	@Test
+	public void test_case4() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.databaseEngine.search("123");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("456");
+		//assertThat(result.equals("Great!"));
+		
+	}
+	
+	@Test
+	public void test_case5() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.databaseEngine.search("Who is Prof Kim");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Well, this is your instructor.");
+		//assertThat(result.equals("Well, this is your instructor."));
+		
 	}
 }
