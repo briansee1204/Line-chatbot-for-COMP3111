@@ -5,6 +5,9 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.net.URISyntaxException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 
 @Slf4j
@@ -12,7 +15,27 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	@Override
 	String search(String text) throws Exception {
 		//Write your code here
-		return null;
+		//String textLowerCase = text.toLowerCase();
+		String result = null;
+		try 
+		{
+			Connection connection = this.getConnection();
+			PreparedStatement stmt = connection.prepareStatement("SELECT response FROM message where keyword='" + text + "'");
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				result = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+			connection.close();
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+			
+			//Write your code here
+			if (result != null)
+				return result;
+			throw new Exception("NOT FOUND");
 	}
 	
 	
